@@ -407,7 +407,7 @@ resourcereport resourceGraph "" {
 # Informe adicional: Planificacion Inicial
 taskreport planOverview "Plan Inicial" {
   scenarios plan
-  headline "Planificacion Inicial del Proyecto"
+  headline "Planificacion Inicial para el Proyecto"
   columns bsi { title 'WBS' },
           name, start, end, effort, cost,
           revenue, chart { ${TaskTip} }
