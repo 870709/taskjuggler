@@ -68,7 +68,7 @@ resource dev2 "Samantha Müller" {
 resource dev3 "Peter Green" {
   email "kkk@unizar.es"
 }
-resource dev4 "Tu Nombre" {
+resource dev4 "Enrique Guaras" {
   email "870709@unizar.es"
   efficiency 0.5
 }
