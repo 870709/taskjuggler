@@ -19,7 +19,7 @@ project pSix "Web Game"  2025-12-15 +5m {
   # the project reports. If not specified, the current day will be
   # used, but this will likely be outside of the project range, so it
   # can't be seen in the reports.
-  now 2026-02-25-13:00
+  now 2026-04-16-12:00
   # The currency for all money values is the US Dollar.
   currency "EUR"
 
@@ -67,6 +67,10 @@ resource dev2 "Samantha Müller" {
 }
 resource dev3 "Peter Green" {
   email "kkk@unizar.es"
+}
+resource dev4 "Tu Nombre" {
+  email "870709@unizar.es"
+  efficiency 0.5
 }
 
 # Now we specify the work packages. The whole project is described as
@@ -147,13 +151,55 @@ task WMGame "Web & Mobile Game" {
     }    
   }
 
+  task tmobF "Mobile AI Optimization" {
+    purge chargeset
+    chargeset mFront
+    responsible dev4
+    depends WMGame.twebF.tGUId
+    
+    task tMobAI "AI-driven UI Adaptation" {
+      effort 8d
+      allocate dev4
+    }
+    task tMobOpt "Mobile Engine Efficiency" {
+      effort 12d
+      allocate dev4, dev2
+      depends WMGame.tmobF.tMobAI
+      journalentry 2026-04-16 "Mejora en eficiencia computacional" {
+        author dev4
+        alert green
+        summary "Los algoritmos de IA integrados consumen un 30% menos de CPU en dispositivos moviles."
+      }
+    }
+  }
+
+  task tcloud "Cloud AI Deployment" {
+    purge chargeset
+    chargeset back
+    responsible dev1
+    depends WMGame.tback.tbackDev
+    
+    task tCloudEval "AI Model Cloud Integration" {
+      effort 5d
+      allocate dev4
+    }
+    task tCloudDep "Compute Efficiency Scaling" {
+      effort 6d
+      allocate dev1, dev4
+      depends WMGame.tcloud.tCloudEval
+    }
+  }
+
   task ttest "Acceptance tests" {
       effort 10d
       allocate boss
       allocate dev2
       actual:effort 20d
+      minstart 2026-05-15
       depends WMGame.twebF
       depends WMGame.tback
+      depends WMGame.tmobF
+      depends WMGame.tcloud
       }
 
     
@@ -222,6 +268,11 @@ textreport frame "" {
   textreport overvi "Overview" {
     formats html
     center '<[report id="overview"]>'
+  }
+
+  textreport planOver "Plan Inicial" {
+    formats html
+    center '<[report id="planOverview"]>'
   }
   
   textreport "Status" {
@@ -351,4 +402,18 @@ resourcereport resourceGraph "" {
   # We only like to show leaf tasks for leaf resources.
   hidetask ~(isleaf() & isleaf_())
   sorttasks plan.start.up
+}
+
+# Informe adicional: Planificacion Inicial
+taskreport planOverview "Plan Inicial" {
+  scenarios plan
+  headline "Planificacion Inicial del Proyecto"
+  columns bsi { title 'WBS' },
+          name, start, end, effort, cost,
+          revenue, chart { ${TaskTip} }
+  timeformat "%a %Y-%m-%d"
+  loadunit days
+  hideresource @all
+  balance cost rev
+  caption 'Valores de esfuerzo en dias-hombre (Plan original).'
 }
